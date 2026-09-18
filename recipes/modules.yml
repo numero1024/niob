@@ -1,0 +1,45 @@
+modules:
+  - type: files
+    files:
+      - source: system
+        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+
+  - type: dnf
+    repos:
+      cleanup: true 
+      copr:
+        - atim/starship
+        - avengemedia/dms
+        - avengemedia/danklinux
+        - imput/helium
+    install:
+      packages:
+        - micro
+        - starship
+        - dms
+        - niri
+        - foot
+        - vesktop
+        - helium-bin
+      exclude:
+        - waybar
+        - alacritty
+    remove:
+      packages:
+        - gdm
+
+  - type: default-flatpaks
+    configurations:
+      - notify: true # Send notification after install/uninstall is finished (true/false)
+        scope: system
+        # If no repo information is specified, Flathub will be used by default
+        # install: # system flatpaks we want all users to have and not remove
+      - scope: user # Also add Flathub user repo, but no user packages
+
+  - type: systemd
+    system:
+      enabled: 
+        - niri.service
+        - dms
+        
+  - type: signing # this sets up the proper policy & signing files for signed images to work fully
